@@ -11,8 +11,10 @@ namespace Loading_a_Spritesheet
         private SpriteBatch _spriteBatch;
 
         List<Texture2D> characterTextures;
+        List<Texture2D> cardTextures;
 
         Texture2D characterSpritesheet;
+        Texture2D cardSpritesheet;
 
         Texture2D characterTexture; 
         Rectangle characterRect;
@@ -28,7 +30,8 @@ namespace Loading_a_Spritesheet
         {
             // TODO: Add your initialization logic here
             characterRect = new Rectangle(50, 50, 25, 35);
-            characterTextures = new List<Texture2D>();   
+            characterTextures = new List<Texture2D>();  
+            cardTextures = new List<Texture2D>();
             base.Initialize();
         }
 
@@ -38,19 +41,18 @@ namespace Loading_a_Spritesheet
 
             // TODO: use this.Content to load your game content here
             characterSpritesheet = Content.Load<Texture2D>("pixel_character");
-
+            cardSpritesheet = Content.Load<Texture2D>("card_deck");
             Texture2D cropTexture;
             Rectangle sourceRect;
 
+            // Character Dimensions
             int width = 117;
             int height = 150;
 
 
-
-
-            /* This is the solution for cropping one texture from a spritesheet
+                        /* This is the solution for cropping one texture from a spritesheet
             // This region will be cropped from the spritesheet
-            Rectangle sourceRect = new Rectangle(8, 33, 117, 150);  
+            Rectangle sourceRect = new Rectangle(8, 33, width, height);  
             
             // Creates an empty Texture2D that will be filled with pixel data from the region we are cropping
             characterTexture = new Texture2D(GraphicsDevice, sourceRect.Width, sourceRect.Height);
@@ -64,7 +66,17 @@ namespace Loading_a_Spritesheet
             // Puts the pixeldata into the Texture2D for our character
             characterTexture.SetData(data);
 
+            Add rest of textures to spritesheet
+
             */
+
+
+            // Load Card Textures using a loop
+            // Card Dimensions
+
+            
+
+
         }
 
         protected override void Update(GameTime gameTime)
