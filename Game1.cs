@@ -59,7 +59,6 @@ namespace Loading_a_Spritesheet
             int width = 117;
             int height = 150;
 
-
             // This is the solution for cropping one texture from a spritesheet
             // This region will be cropped from the spritesheet
             sourceRect = new Rectangle(8, 33, width, height);  
@@ -77,10 +76,6 @@ namespace Loading_a_Spritesheet
             characterTexture.SetData(data);
 
          
-
-            
-
-
             // Load Card Textures using a loop
             // Card Dimensions.  Make sure the spritesheets dimensions are evenly divisible by the number of items rows and columns
             width = cardSpritesheet.Width / 13;     // 13 cards in a row
@@ -104,8 +99,6 @@ namespace Loading_a_Spritesheet
                     if (cardTextures.Count < 55)
                         cardTextures.Add(cropTexture);
                 }
-
-
         }
 
         protected override void Update(GameTime gameTime)
