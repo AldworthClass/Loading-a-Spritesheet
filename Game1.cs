@@ -21,6 +21,11 @@ namespace Loading_a_Spritesheet
 
         Rectangle cardRect;
 
+        MouseState mouseState;
+        MouseState prevMouseState;
+
+        int cardIndex;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -35,6 +40,7 @@ namespace Loading_a_Spritesheet
             cardRect = new Rectangle(300, 50, 66, 100);
             characterTextures = new List<Texture2D>();  
             cardTextures = new List<Texture2D>();
+            cardIndex = 0;
             base.Initialize();
         }
 
@@ -45,6 +51,7 @@ namespace Loading_a_Spritesheet
             // TODO: use this.Content to load your game content here
             characterSpritesheet = Content.Load<Texture2D>("pixel_character");
             cardSpritesheet = Content.Load<Texture2D>("card_deck");
+
             Texture2D cropTexture;
             Rectangle sourceRect;
 
@@ -53,9 +60,9 @@ namespace Loading_a_Spritesheet
             int height = 150;
 
 
-            /* This is the solution for cropping one texture from a spritesheet
+            // This is the solution for cropping one texture from a spritesheet
             // This region will be cropped from the spritesheet
-            Rectangle sourceRect = new Rectangle(8, 33, width, height);  
+            sourceRect = new Rectangle(8, 33, width, height);  
 
             // Creates an empty Texture2D that will be filled with pixel data from the region we are cropping
             characterTexture = new Texture2D(GraphicsDevice, sourceRect.Width, sourceRect.Height);
@@ -69,15 +76,15 @@ namespace Loading_a_Spritesheet
             // Puts the pixeldata into the Texture2D for our character
             characterTexture.SetData(data);
 
-            Add rest of textures to spritesheet
+         
 
-            */
+            
 
 
             // Load Card Textures using a loop
-            // Card Dimensions
-            width = cardSpritesheet.Width / 13;
-            height = cardSpritesheet.Height / 5;
+            // Card Dimensions.  Make sure the spritesheets dimensions are evenly divisible by the number of items rows and columns
+            width = cardSpritesheet.Width / 13;     // 13 cards in a row
+            height = cardSpritesheet.Height / 5;    // 5 rows
 
             for(int y = 0; y < 5; y++)
                 for (int x = 0; x < 13; x++)
@@ -87,7 +94,7 @@ namespace Loading_a_Spritesheet
                     // Creates an empty Texture2D that will be filled with pixel data from the region we are cropping
                     cropTexture = new Texture2D(GraphicsDevice, width, height);
                     // Creates an array to temporarily store all of the pixeldata from the region we are cropping                    Color[] data = new Color[width * height];
-                    Color[] data = new Color[width * height];
+                    data = new Color[width * height];
                     // Puts the pixeldata from the spritesheet into the array
                     cardSpritesheet.GetData(0, sourceRect, data, 0, data.Length);
                     // Puts pixeldata from the array into the Texture2D
@@ -103,10 +110,25 @@ namespace Loading_a_Spritesheet
 
         protected override void Update(GameTime gameTime)
         {
+            prevMouseState = mouseState;
+            mouseState = Mouse.GetState();
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            // Allows us to scroll through the List of card Texture2D's using the mouse
+            // Detects a single left mouse click
+            if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
+                cardIndex -= 1;    
+            // Detects a single right mouse click
+            else if (mouseState.RightButton == ButtonState.Pressed && prevMouseState.RightButton == ButtonState.Released)
+                cardIndex += 1;
+
+            // Verifies we don't go beyond the bounds of the List
+            if (cardIndex < 0)
+                cardIndex = 0;
+            else if (cardIndex >= cardTextures.Count)
+                cardIndex = cardTextures.Count - 1;
 
             base.Update(gameTime);
         }
@@ -118,8 +140,8 @@ namespace Loading_a_Spritesheet
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
 
-            //_spriteBatch.Draw(characterTexture, characterRect, Color.White);
-            _spriteBatch.Draw(cardTextures[43], cardRect, Color.White);
+            _spriteBatch.Draw(characterTexture, characterRect, Color.White);
+            _spriteBatch.Draw(cardTextures[cardIndex], cardRect, Color.White);
 
             _spriteBatch.End();
 
